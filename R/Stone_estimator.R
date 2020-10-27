@@ -91,11 +91,19 @@ init <- function(x) c(mean(x), median(x), mean(x, trim=0.05))
 #'             for each of the preliminary estimators. The default value is
 #'             an array containing the mean, the median, and a trimmed mean (.05 from both tails).
 #' 
-#' @details  Stone(1975) takes inth to be the median in his simulations. The default values of dn and tn are taken from Stone (1975), who 
-#' considered a sample of size 40. For asymptotic efficiency of the estimators,
+#' @details   Stone (1975) uses \eqn{r_n=\hat\sigma t_n} 
+#' as the bandwidth of the Gaussian kernel, where \eqn{\hat\sigma} is the median of 
+#' the \eqn{X_i-inth}'s.
+#' For asymptotic efficiency of the estimators,
 #' a) dn\eqn{\to\infty} and tn\eqn{\to 0} b)
-#' \deqn{\frac{dn^2}{n^{1-\epsilon}tn^6}=O(1)}
-#' for some \eqn{\epsilon>0}. See (1.13) of Stone (1975) for more details.
+#' \deqn{\frac{(dn)^2}{n^{1-\epsilon}(tn)^6}=O(1)}
+#' for some \eqn{\epsilon>0}.  A rule of thumb plug-in estimate
+#' for the optimal kernel width is 1.059\eqn{\hat\sigma n^{-1/5}} where \eqn{\hat\sigma}
+#' is an estimator of the standard deviation, which does not satisfy the 
+#' above relation. Stone(1975) takes inth to be the median in his simulations. The default choices of dn and tn 
+#' are taken from Stone (1975), who 
+#' considered a sample of size 40. Stone(1975)'s estimator uses Gaussian 
+#' Kernels to estimate the unknown symmetric density. 
 #' 
 #' 
 #' @return   An array of the same length as inth. Each element is the one-step
