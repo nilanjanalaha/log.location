@@ -66,6 +66,8 @@ of a location parameter}, Ann. Statist., 3, 267-284.
 }
 \seealso{
 \code{\link{giveth}}
+
+\code{\link{giveth}}
 }
 \author{
 \href{https://connects.catalyst.harvard.edu/Profiles/display/Person/184207}{Nilanjana Laha}

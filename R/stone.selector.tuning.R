@@ -48,6 +48,7 @@
 #'of a location parameter}, Ann. Statist., 3, 267-284.
 #'@author \href{https://connects.catalyst.harvard.edu/Profiles/display/Person/184207}{Nilanjana Laha}
 #' (maintainer), \email{nlaha@@hsph.harvard.edu}.
+#' @seealso \code{\link{giveth}}
 #' @examples {}
 #'   @export
 stone.select <- function(x, inth, D, t, B)
@@ -55,9 +56,9 @@ stone.select <- function(x, inth, D, t, B)
   #Missing values
   my.grid <- seq(1,30, by=2)
   
-  if(missing(D)) D <- my.grid
-  if(missing(t)) t <- c(0.01, seq(0.10, 0.80, by=0.05))
-  if(missing(B)) B <- 200
+  if(missing(D)) D <- seq(10,80, by=10)
+  if(missing(t)) t <- seq(0.1,0.8, by=0.1)
+  if(missing(B)) B <- 100
   if(missing(inth)) {
     warning("the preliminary estimator inth is missing; using the sample
             median")

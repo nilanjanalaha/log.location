@@ -4,24 +4,35 @@
 \alias{giveth}
 \title{Stone (1975)'s estimator}
 \usage{
-giveth(x, inth, tn, dn)
+giveth(x, inthv)
 }
 \arguments{
 \item{x}{A vector of length n; the dataset}
 
-\item{inth}{An array giving some preliminary estimators for \eqn{\theta}. 
-The function calculates different one-step estimators
-for each of the preliminary estimators. The default value is
-an array containing the mean, the median, and a trimmed mean (.05 from both tails).}
+\item{dn}{A parameter for the truncation. The default value is 20.}
 
 \item{tn}{A parameter associated with the bandwidth of the kernel
 density estimator. The default value is 0.60.}
 
-\item{dn}{A parameter for the truncation. The default value is 20.}
+\item{inth}{A preliminary estimator for \eqn{\theta}. 
+The default is the median.}
+
+\item{alpha}{The confidence level for the confidence bands. An (1-alpha) percent
+confidence interval is constructed. Alpha should lie in the interval (0, 0.50). The default
+value is 0.05.}
 }
 \value{
-An array of the same length as inth. Each element is the one-step
-          estimator based on the corresponding element in inth.
+A list of length two.   
+\itemize{
+\item \code{estimate:} An array of same length as init , giving the estimators of m
+           based on the corresponding initial estimators in init. If init is missing,
+             only one estimate is produced, which uses the sample median as the initial
+             estimator.
+\item \code{CI:} A matrix giving the (1-alpha) percent confidence intervals (CI). Each row corresponds to an initial estimator
+                in init (if missing, the sample median is used). The first column
+                corresponds to the lower CI, and the second column corresponds to the 
+                upper CI.
+}
 }
 \description{
 Gives a truncated one step estimator for  the location parameter in a symmetric

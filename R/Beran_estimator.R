@@ -186,8 +186,8 @@ beran.est.in <- function(x, th, f,  hatvar, alpha)
   #The estimate
   est <- th+ mean(temp)/hatvar
   #CI
-  lb <- est+qnorm(alpha/2)*sqrt(hatvar)
-  ub <- est-qnorm(alpha/2)*sqrt(hatvar)
+  lb <- est+qnorm(alpha/2)/sqrt(hatvar*n)
+  ub <- est-qnorm(alpha/2)/sqrt(hatvar*n)
   c(est, lb, ub)
 }
 

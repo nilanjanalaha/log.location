@@ -19,9 +19,13 @@ fhd=function(t,rex,x,inth)
   mean(ans)/2
 }
 fhdvec=function(t,rex,x,inth) sapply(t,fhd,rex=rex,x=x,inth=inth)
-Lh=function(t,rex,x,inth) {
-  
+Lh.in =function(t,rex,x,inth) {
+  if(fh(t, rex, x, inth)==0) return(0)
   fhdvec(t,rex,x,inth)/fh(t,rex,x,inth)}
+
+Lh <- function(t, rex, x, inth) {
+  sapply(t, Lh.in, rex=rex, x=x, inth=inth)
+}
 
 Ahin=function(t,rex,c,x,inth)  Lh(t,rex,x,inth)^2*g(t/c)*fh(t,rex,x,inth)
 Ah=function(r,c,x,inth) pracma::integral(Ahin,xmin=-c,xmax=c,c=c,rex=r,x=x,inth=inth)
@@ -48,7 +52,7 @@ pfnin=function(y,x,r,inth)
 }
 pfn=function(y,x,r,inth) sapply(y,pfnin,x=x,r=r,inth=inth)
 ######################################MAIN FUNCTION#################################
-givethin2=function(x,inth, tn, dn)
+givethin2=function(x, inth, tn, dn)
 {
   x=sort(x)
   
@@ -58,6 +62,8 @@ givethin2=function(x,inth, tn, dn)
   xmin=-cc
   xmax=cc
   grid1=seq(xmin,xmax,length.out=61)
+  
+  #The estimator of Fisher information
   v=Ah(r,cc,x,inth)
   grid2=grid1[2:61]
   grid1=grid1[1:60]
@@ -67,7 +73,7 @@ givethin2=function(x,inth, tn, dn)
   rim=(grid2-grid1)*v1*v2/v
   # rim=integral(hthfunc,xmin=-cc+inth-min(x),xmax=cc+inth-max(x),rex=r,c=cc,xx=x,method="Richardson",inth=inth)/v
   temp=inth-sum(rim)
-  temp
+  c(temp, v)
 }
 
 # If no preliminary value is provided, it is chosen
@@ -86,11 +92,11 @@ init <- function(x) c(mean(x), median(x), mean(x, trim=0.05))
 #' @param dn A parameter for the truncation. The default value is 20.
 #' @param tn A parameter associated with the bandwidth of the kernel
 #'           density estimator. The default value is 0.60.
-#' @param inth An array giving some preliminary estimators for \eqn{\theta}. 
-#'             The function calculates different one-step estimators
-#'             for each of the preliminary estimators. The default value is
-#'             an array containing the mean, the median, and a trimmed mean (.05 from both tails).
-#' 
+#' @param inth A preliminary estimator for \eqn{\theta}. 
+#'             The default is the median.
+#' @param alpha The confidence level for the confidence bands. An (1-alpha) percent
+#'               confidence interval is constructed. Alpha should lie in the interval (0, 0.50). The default
+#'               value is 0.05.
 #' @details   Stone (1975) uses \eqn{r_n=\hat\sigma t_n} 
 #' as the bandwidth of the Gaussian kernel, where \eqn{\hat\sigma} is the median of 
 #' the \eqn{X_i-inth}'s.
@@ -104,10 +110,17 @@ init <- function(x) c(mean(x), median(x), mean(x, trim=0.05))
 #' are taken from Stone (1975), who 
 #' considered a sample of size 40. Stone(1975)'s estimator uses Gaussian 
 #' Kernels to estimate the unknown symmetric density. 
-#' 
-#' 
-#' @return   An array of the same length as inth. Each element is the one-step
-#'           estimator based on the corresponding element in inth.
+#'@return   A list of length two.   
+#'\itemize{
+#'\item \code{estimate:} An array of same length as init , giving the estimators of m
+#'            based on the corresponding initial estimators in init. If init is missing,
+#'              only one estimate is produced, which uses the sample median as the initial
+#'              estimator.
+#'\item \code{CI:} A matrix giving the (1-alpha) percent confidence intervals (CI). Each row corresponds to an initial estimator
+#'                 in init (if missing, the sample median is used). The first column
+#'                 corresponds to the lower CI, and the second column corresponds to the 
+#'                 upper CI.
+#'}
 #'@references Laha, N. \emph{ Location estimation fr symmetric and 
 #'           log-concave densities}. Submitted.
 #'@references Stone, C. (1975). \emph{Adaptive maximum likelihood estimators
@@ -119,17 +132,17 @@ init <- function(x) c(mean(x), median(x), mean(x, trim=0.05))
 #'  giveth(x, inth=inth)
 #'  giveth(x)
 #' @export 
-giveth=function(x, inth, tn, dn)
+giveth=function(x, inth, tn=0.60, dn=30, alpha=0.5)
 {
-  if(missing(inth)) inth <- init(x)
+  if(missing(inth)) inth <- median(x)
   if(missing(tn)) tn <- 0.60
   if(missing(dn)) dn <- 20
+  n <- length(x)
   
-  r=length(inth)
-  ans=numeric(r)
-  for (i in 1:r)
-    ans[i]=givethin2(x,inth[i], tn, dn)
-  ans
+  res <- givethin2(x, inth, tn, dn)
+  lb <- res[1] + qnorm(alpha/2)/sqrt(n*res[2]) 
+  ub <- res[1] - qnorm(alpha/2)/sqrt(n*res[2]) 
+  list(estimate=res[1], CI=c(lb, ub))
 }
 
 
