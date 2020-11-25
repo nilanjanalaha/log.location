@@ -24,7 +24,7 @@ Lh=function(t,rex,x,inth) {
   fhdvec(t,rex,x,inth)/fh(t,rex,x,inth)}
 
 Ahin=function(t,rex,c,x,inth)  Lh(t,rex,x,inth)^2*g(t/c)*fh(t,rex,x,inth)
-Ah=function(r,c,x,inth) integral(Ahin,xmin=-c,xmax=c,c=c,rex=r,x=x,inth=inth)
+Ah=function(r,c,x,inth) pracma::integral(Ahin,xmin=-c,xmax=c,c=c,rex=r,x=x,inth=inth)
 thfunc=function(y,rex,c,t,x,inth)  
 {
   Lh(y+t-inth,rex,x,inth)*g((y+t-inth)/c)*dnorm(t,0,rex)

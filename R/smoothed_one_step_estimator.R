@@ -52,7 +52,7 @@
   
   L3=sapply(x,L3in,J=J,x=x,b=b,inth=inth,phi=phi)
   ans <- sapply( q, th3_truncate, L3=L3, inth=inth, n=n, alpha=alpha, mlef=mlef, x=x)
-  list( est <- data.frame(q=q, est=ans[1,]), CI <- data.frame(q=q, lb=ans[2, ], ub=ans[3,]))
+  list( estimate = data.frame(q=q, est=ans[1,]), CI = data.frame(q=q, lb=ans[2, ], ub=ans[3,]))
   
  }
  
