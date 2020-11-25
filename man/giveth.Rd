@@ -4,18 +4,18 @@
 \alias{giveth}
 \title{Stone (1975)'s estimator}
 \usage{
-giveth(x, inthv)
+giveth(x, inth, tn = 0.6, dn = 30, alpha = 0.5)
 }
 \arguments{
 \item{x}{A vector of length n; the dataset}
 
-\item{dn}{A parameter for the truncation. The default value is 20.}
+\item{inth}{A preliminary estimator for \eqn{\theta}. 
+The default is the median.}
 
 \item{tn}{A parameter associated with the bandwidth of the kernel
 density estimator. The default value is 0.60.}
 
-\item{inth}{A preliminary estimator for \eqn{\theta}. 
-The default is the median.}
+\item{dn}{A parameter for the truncation. The default value is 20.}
 
 \item{alpha}{The confidence level for the confidence bands. An (1-alpha) percent
 confidence interval is constructed. Alpha should lie in the interval (0, 0.50). The default
