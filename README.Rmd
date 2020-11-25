@@ -30,9 +30,9 @@ install.packages("log.location")
 
 And the development version from [GitHub](https://github.com/) with:
 
-``` r
-# install.packages("devtools")
-devtools::install_github("nilanjanalaha/log.location")
+```{r}
+#Uninstalling previous versions, if installed
+devtools::install_github("nilanjanalaha/log.location", force=TRUE)
 ```
 
 
@@ -184,3 +184,43 @@ lines(grid.M, CI.ub, col='red')
 abline(h=0, col='blue')
 
 ```
+
+## Stone's estimator
+
+Stone (1975)'s estimators also give the estimator of the location $\theta$. The function to use is **giveth**. You have to supply an initial estimator of $\theta$, which is **inth**. The tuning parameters are dn (truncation) and tn (smoothness). If not sapplied byy the user, default values are used.
+```{r Stone}
+x <- rnorm(100)
+giveth(x, inth = mean(x))
+giveth(x, inth = mean(x), dn=30, tn=0.50)
+```
+
+#Estimators in Laha et al. (2020)
+
+## Partial MLE estimator
+Use the function **p.mle**. The parameter q can be used to give the truncation level. The default is 0. Please load the package ``logcondens" before using this. Although log.location adds logcondens as a dependency, for some reason, the funvtion ``PreProcess does not get loaded".
+
+```{r p.mle}
+x <- rnorm(100)
+library(logcondens)
+p.mle(x, init=mean(x))
+p.mle(x, q=c(0, 0.01, 0.02))
+```
+
+## MLE estimator
+The function **MLE_location** gives the MLE under the log-concave location model of laha et al. (2020). Please load the package ``logcondens" before using this. Although log.location adds logcondens as a dependency, for some reason, the funvtion ``PreProcess does not get loaded".
+
+```{r MLE}
+library(logcondens)
+MLE_location(x)
+```
+
+## The smoothed symmetrized estimator
+
+The function **s.sym** calculates this estimator. Pass the initial estimator as inth and use q to set the truncation level.
+
+```{r smoothed symmetrized}
+library(logcondens)
+s.sym(x)
+s.sym(x, q=c(0.01, 0.02))
+```
+
